@@ -6,7 +6,7 @@ namespace WorkerListProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
         }
     }
 }
