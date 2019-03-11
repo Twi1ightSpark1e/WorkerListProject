@@ -39,6 +39,28 @@ namespace WorkerListProject
         float salary;
 
         /// <summary>
+        /// Вывод одного работника
+        /// </summary>
+        /// <param type="Worker">Работник</param>
+        public void Print() {
+            Console.WriteLine($"fullName: { fullName} position:{position}" +
+                $" signingDate: {signingDate} contractDuration: {contractDuration}" +
+                $" salary:{salary}");
+        }
+
+        /// <summary>
+        /// Вывод всех работников
+        /// </summary>
+        /// <param type="List<Worker>">Список работников</param>
+        public static void Print(List<Worker> listwrks)
+        {
+            foreach (Worker wrk in listwrks)
+            {
+                wrk.Print();
+            }
+        }
+
+        /// <summary>
         /// Добавление одного элемента структуры в список работников
         /// </summary>
         /// <param type="List<Worker>">Список работников</param>
