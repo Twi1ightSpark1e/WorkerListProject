@@ -43,7 +43,7 @@ namespace WorkerListProject
         /// </summary>
         /// <param type="Worker">Работник</param>
         public void Print() {
-            Console.WriteLine($"fullName: { fullName} position:{position}" +
+            Console.WriteLine($"fullName: {fullName} position: {position}" +
                 $" signingDate: {signingDate} contractDuration: {contractDuration}" +
                 $" salary:{salary}");
         }
@@ -67,6 +67,7 @@ namespace WorkerListProject
         public static Worker AddWorker(List<Worker> workers)
         {
             Worker worker = new Worker();
+            bool success = false;
 
             Console.WriteLine("Введите ФИО работника: ");
             worker.fullName = Console.ReadLine();
@@ -74,14 +75,35 @@ namespace WorkerListProject
             Console.WriteLine("Введите должность работника: ");
             worker.position = Console.ReadLine();
 
-            Console.WriteLine("Введите дату подписания контракта работника (dd.mm.yyyy): ");
-            worker.signingDate = DateTime.Parse(Console.ReadLine());
+            do
+            {
+                Console.WriteLine("Введите дату подписания контракта работника (dd.mm.yyyy): ");
+                success = DateTime.TryParse(Console.ReadLine(), out worker.signingDate);
+                if (!success)
+                {
+                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                }
+            } while (!success);
 
-            Console.WriteLine("Введите время действия контракта: ");
-            worker.contractDuration = uint.Parse(Console.ReadLine());
+            do
+            {
+                Console.WriteLine("Введите время действия контракта: ");
+                success = uint.TryParse(Console.ReadLine(), out worker.contractDuration);
+                if (!success)
+                {
+                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                }
+            } while (!success);
 
-            Console.WriteLine("Введите оклад работника: ");
-            worker.salary = float.Parse(Console.ReadLine());
+            do
+            {
+                Console.WriteLine("Введите оклад работника: ");
+                success = float.TryParse(Console.ReadLine(), out worker.salary);
+                if (!success)
+                {
+                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                }
+            } while (!success);
 
             workers.Add(worker);
             return worker;
@@ -92,7 +114,7 @@ namespace WorkerListProject
     {
         static void Main(string[] args)
         {
-               
+           
         }
     }
 }
