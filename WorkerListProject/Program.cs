@@ -50,9 +50,9 @@ namespace WorkerListProject
         /// </summary>
         /// <param type="Worker">Работник</param>
         public void Print() {
-            Console.WriteLine($"fullName: {fullName} position: {position}" +
-                $" signingDate: {signingDate} contractDuration: {contractDuration}" +
-                $" salary:{salary}");
+            Console.WriteLine($"Фамилия работника: {fullName} Должность: {position}" +
+                $" Дата подписания контракта: {signingDate} Срок действия контракта: {contractDuration}" +
+                $" Оклад:{salary}");
         }
 
         /// <summary>
