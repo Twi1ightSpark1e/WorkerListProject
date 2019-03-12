@@ -73,46 +73,52 @@ namespace WorkerListProject
         /// <param type="List<Worker>">Список работников</param>
         public static Worker AddWorker(List<Worker> workers)
         {
+            // Считывание ФИО работника
             Worker worker = new Worker();
-            bool success = false;
-
             Console.WriteLine("Введите ФИО работника: ");
             worker.fullName = Console.ReadLine();
 
+            // Считывание должности работника
             Console.WriteLine("Введите должность работника: ");
             worker.position = Console.ReadLine();
 
+            // Считывание даты подписания контракта работника
+            bool success = false;
             do
             {
                 Console.WriteLine("Введите дату подписания контракта работника (dd.mm.yyyy): ");
                 success = DateTime.TryParse(Console.ReadLine(), out worker.signingDate);
-                if (!success)
+                if (!success) // if ввели неправильно
                 {
                     Console.WriteLine("Введите еще раз правильное значение!!!");
                 }
-            } while (!success);
+            } while (!success); // Пока не ввели правильное значение
 
+            // Считывание времени действия контракта
             do
             {
                 Console.WriteLine("Введите время действия контракта: ");
                 success = uint.TryParse(Console.ReadLine(), out worker.contractDuration);
-                if (!success)
+                if (!success) // if ввели неправильно
                 {
                     Console.WriteLine("Введите еще раз правильное значение!!!");
                 }
-            } while (!success);
+            } while (!success); // Пока не ввели правильное значение
 
+            // Считывание оклада работника
             do
             {
                 Console.WriteLine("Введите оклад работника: ");
                 success = float.TryParse(Console.ReadLine(), out worker.salary);
-                if (!success)
+                if (!success) // if ввели неправильно
                 {
                     Console.WriteLine("Введите еще раз правильное значение!!!");
                 }
-            } while (!success);
+            } while (!success); // Пока не ввели правильное значение
 
+            // Добавление нового работника в список
             workers.Add(worker);
+            // Вернуть нового работника
             return worker;
         }
 
