@@ -121,53 +121,6 @@ namespace WorkerListProject
         /// </summary>
         public static void PrintFiltered(List<Worker> workers, Filter filter)
         {
-            bool IsInRange(IComparable subject, IComparable lower, IComparable upper)
-            {
-#region Логика работы
-                /// В таблице ниже,    'lower' — нижняя граница диапазона
-                ///                    'upper' — верхняя граница диапазона
-                ///                   'result' — возвращаемое значение:
-                ///                              true если subject попадает в диапазон,
-                ///                              false в противном случае;
-                ///                'compareto' — результат вызова subject.CompareTo
-                ///                     'null' — такая граница не указана;
-                ///  ------------------------------------------------------------------
-                /// | # | lower | upper | result | compareto(lower) | compareto(upper) |
-                ///  ------------------------------------------------------------------
-                /// | 1 | null  | null  |  true  |        1         |         1        |
-                /// | 2 | null  |  >=   |  true  |        1         |        < 1       |
-                /// | 3 | null  |   <   | false  |        1         |         1        |
-                /// | 4 |   >   | null  | false  |       -1         |         1        |
-                /// | 5 |  <=   | null  |  true  |      > -1        |         1        |
-                /// | 6 |   >   |  >=   | false  |       -1         |        < 1       |
-                /// | 7 |   >   |   <   | false  |       -1         |         1        |
-                /// | 8 |  <=   |  >=   | true   |      > -1        |        < 1       |
-                /// | 9 |  <=   |   <   | false  |      > -1        |        -1        |
-                ///  ------------------------------------------------------------------
-                /// В данной таблице существуют пересечения значений compareto у правильных и
-                /// неправильных диапазонов:
-                ///     Вторая строка пересекается с девятой;
-                ///     Первая строка пересекается с третьей;
-                ///     Пятая  строка пересекается с третьей.
-                /// В связи с этим также были добавлены проверки на null.
-#endregion
-                return
-                    ((subject.CompareTo(lower) > -1) &&
-                     (subject.CompareTo(upper) <  1))
-                    ||
-                    ((subject.CompareTo(lower) > -1) &&
-                     (subject.CompareTo(upper) == 1) &&
-                     (lower != null) &&
-                     (upper == null))
-                    ||
-                    ((subject.CompareTo(lower) == 1) &&
-                     (subject.CompareTo(upper) <  1))
-                    ||
-                    ((subject.CompareTo(lower) == 1) &&
-                     (subject.CompareTo(upper) == 1) &&
-                     (upper == null));
-            }
-
             foreach (var worker in workers)
             {
                 bool shouldPrint = true;
@@ -177,31 +130,29 @@ namespace WorkerListProject
                 {
                     shouldPrint = false;
                 }
+
                 if ((filter.positionSubstring != null) &&
                     (!worker.position.Contains(filter.positionSubstring)))
                 {
                     shouldPrint = false;
                 }
-                if ((filter.signingDateLowerBound != null) ||
-                    (filter.signingDateUpperBound != null))
+
+                if ((worker.signingDate < filter.signingDateLowerBound) ||
+                    (worker.signingDate > filter.signingDateUpperBound))
                 {
-                    shouldPrint = IsInRange(worker.signingDate,
-                            filter.signingDateLowerBound,
-                            filter.signingDateUpperBound);
+                    shouldPrint = false;
                 }
-                if ((filter.contractDurationLowerBound != null) ||
-                    (filter.contractDurationUpperBound != null))
+
+                if ((worker.contractDuration < filter.contractDurationLowerBound) ||
+                    (worker.contractDuration > filter.contractDurationUpperBound))
                 {
-                    shouldPrint = IsInRange(worker.contractDuration,
-                            filter.contractDurationLowerBound,
-                            filter.contractDurationUpperBound);
+                    shouldPrint = false;
                 }
-                if ((filter.salaryLowerBound != null) ||
-                    (filter.salaryUpperBound != null))
+
+                if ((worker.salary < filter.salaryLowerBound) ||
+                    (worker.salary > filter.salaryUpperBound))
                 {
-                    shouldPrint = IsInRange(worker.salary,
-                            filter.salaryLowerBound,
-                            filter.salaryUpperBound);
+                    shouldPrint = false;
                 }
 
                 if (shouldPrint)
