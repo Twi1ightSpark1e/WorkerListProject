@@ -7,7 +7,54 @@ namespace WorkerListProject
     {
         static void Main(string[] args)
         {
+            Console.WriteLine($"Главное меню:{Environment.NewLine}"+
+                        $"1: Добавить сотрудника{Environment.NewLine}" +
+                        $"2: Вывод всех работников{Environment.NewLine}" +
+                        $"3: Задать фильтрацию{Environment.NewLine}" +
+                        $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
+                        $"5: Завершить работу программы{Environment.NewLine}");
+            // Считывание номера выбранного пункта
+            int numMenu = 0;
 
+            List<Worker> workers = NULL;
+
+            bool success = true;
+            // Пока не вышли из главного меню
+            while(success) 
+            {
+                numMenu = 0;
+                do
+                {
+                    Console.WriteLine("Выберите номер пункта главного меню:");
+
+                    numMenu = Console.ReadLine();
+                        
+                    if (numMenu > 0 || numMenu <= 5) // если не выбрали пункт
+                    {
+                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                    }
+                } while (numMenu > 0 || numMenu <= 5); // Пока не ввели правильное значение
+                
+                switch (numMenu)
+                {
+                    case 1:
+                        workers.AddWorker(workers);
+                        break;
+                    case 2:
+                        workers.Print(workers);
+                        break;
+                    case 3:
+                        workers.SetFilter(Filter);
+                        break;
+                    case 4:
+                        workers.PrintFiltered(workers,Filter);
+                        break;
+                    case 5:
+                        exit();
+                        break;
+                }
+                
+            }
         }
     }
 
