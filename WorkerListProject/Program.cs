@@ -238,22 +238,20 @@ namespace WorkerListProject
         /// <param name="filter">Значения фильтра</param>
         public static void PrintFiltered(List<Worker> workers, Filter filter)
         {
-            foreach (var worker in workers) // цикличная проверка каждого рабочего
+            foreach (var worker in workers) // Цикличная проверка каждого рабочего
             {
-                bool shouldPrint = true; // флаг, означающий нужно ли выводить данного рабочего
-
                 // Проверка: включает ли ФИО рабочего соответствующую строку из фильтра
                 if ((filter.fullNameSubstring != null) &&
                     (!worker.fullName.Contains(filter.fullNameSubstring)))
                 {
-                    shouldPrint = false;
+                    continue;
                 }
 
                 // Проверка: включает ли должность работника соответствующую строку из фильтра
                 if ((filter.positionSubstring != null) &&
                     (!worker.position.Contains(filter.positionSubstring)))
                 {
-                    shouldPrint = false;
+                    continue;
                 }
 
                 // Проверка: принадлежит ли дата подписания контракта
@@ -261,7 +259,7 @@ namespace WorkerListProject
                 if ((worker.signingDate < filter.signingDateLowerBound) ||
                     (worker.signingDate > filter.signingDateUpperBound))
                 {
-                    shouldPrint = false;
+                    continue;
                 }
 
                 // Проверка: принадлежит ли срок действия контракта
@@ -269,7 +267,7 @@ namespace WorkerListProject
                 if ((worker.contractDuration < filter.contractDurationLowerBound) ||
                     (worker.contractDuration > filter.contractDurationUpperBound))
                 {
-                    shouldPrint = false;
+                    continue;
                 }
 
                 // Проверка: принадлежит ли оклад работника
@@ -277,14 +275,11 @@ namespace WorkerListProject
                 if ((worker.salary < filter.salaryLowerBound) ||
                     (worker.salary > filter.salaryUpperBound))
                 {
-                    shouldPrint = false;
+                    continue;
                 }
 
                 // Если данный рабочий прошёл все проверки — вывести его
-                if (shouldPrint)
-                {
-                    worker.Print();
-                }
+                worker.Print();
             }
         }
 
