@@ -7,53 +7,61 @@ namespace WorkerListProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Главное меню:{Environment.NewLine}"+
-                        $"1: Добавить сотрудника{Environment.NewLine}" +
-                        $"2: Вывод всех работников{Environment.NewLine}" +
-                        $"3: Задать фильтрацию{Environment.NewLine}" +
-                        $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
-                        $"5: Завершить работу программы{Environment.NewLine}");
+            // Инициализируем список работников
+            List<Worker> workers = new List<Worker>();
+
+            // Инициализируем фильтр
+            Filter filter = new Filter();
+
             // Считывание номера выбранного пункта
             int numMenu = 0;
 
-            List<Worker> workers = NULL;
 
-            bool success = true;
             // Пока не вышли из главного меню
-            while(success) 
+            bool success = true;
+            bool done = false;
+            while (success) 
             {
                 numMenu = 0;
                 do
                 {
-                    Console.WriteLine("Выберите номер пункта главного меню:");
+                    // Вывод сообщения о главном меню работы с программой
+                    Console.WriteLine($"Выберите пункт главного меню:{Environment.NewLine}" +
+                                $"1: Добавить сотрудника{Environment.NewLine}" +
+                                $"2: Вывод всех работников{Environment.NewLine}" +
+                                $"3: Задать фильтрацию{Environment.NewLine}" +
+                                $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
+                                $"5: Завершить работу программы{Environment.NewLine}");
 
-                    numMenu = Console.ReadLine();
-                        
-                    if (numMenu > 0 || numMenu <= 5) // если не выбрали пункт
+                    // проверка введенного пункта главного меню
+                    done = int.TryParse(Console.ReadLine(), out numMenu);
+
+                    if (!done && (numMenu > 0 || numMenu <= 5)) // если не выбрали пункт
                     {
                         Console.WriteLine("Введите еще раз правильное значение!!!");
                     }
-                } while (numMenu > 0 || numMenu <= 5); // Пока не ввели правильное значение
-                
+                } while (!done && (numMenu > 0 || numMenu <= 5)); // Пока не ввели правильное значение
+
+                // Переход по выбранному номеру меню
                 switch (numMenu)
                 {
                     case 1:
-                        workers.AddWorker(workers);
+                        Worker.AddWorker(workers);
                         break;
                     case 2:
-                        workers.Print(workers);
+                        Worker.Print(workers);
                         break;
                     case 3:
-                        workers.SetFilter(Filter);
+                        Filter.SetFilter(ref filter);
                         break;
                     case 4:
-                        workers.PrintFiltered(workers,Filter);
+                        Worker.PrintFiltered(workers, filter);
                         break;
                     case 5:
-                        exit();
-                        break;
+                        Console.WriteLine("Завершение работы программы");
+                        return;
                 }
-                
+                Console.WriteLine($"Сделано{Environment.NewLine}");
             }
         }
     }
@@ -86,148 +94,6 @@ namespace WorkerListProject
             foreach (Worker wrk in listwrks)
             {
                 wrk.Print();
-            }
-        }
-
-        /// <summary>
-        /// Ввод значений фильтра
-        /// </summary>
-        /// <param name="filter">Значения фильтра</param>
-        public static void SetFilter(ref Filter filter)
-        {
-            
-            bool success = true;
-            // Пока не вышли из фильтра
-            while(success) 
-            {
-                Console.WriteLine($"Меню:{Environment.NewLine}"+
-                        $"1: ФИО{Environment.NewLine}" +
-                        $"2: Должность{Environment.NewLine}" +
-                        $"3: Дата подписания контракта{Environment.NewLine}" +
-                        $"4: Срока действия контракта{Environment.NewLine}" +
-                        $"4: Оклад{Environment.NewLine}" +
-                        $"5: Выйти из работы с фильтра{Environment.NewLine}");
-                
-                // Считывание номера выбранного пункта
-                int numFilter = 0;
-                do
-                {
-                    Console.WriteLine("Выберите номер пункта для работы с фильтром:");
-
-                    numFilter = Console.ReadLine();
-                    
-                    if (numFilter > 0 || numFilter <= 5) // если не выбрали пункт
-                    {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
-                    }
-                } while (numFilter > 0 || numFilter <= 5); // Пока не ввели правильное значение
-
-                
-
-                //выбран пункт фильтра ФИО
-                if (numFilter == 1)
-                {
-                    Console.WriteLine("Введите подстроку для поиска по ФИО:");
-                    filter.fullNameSubstring = Console.ReadLine();
-                }
-                //выбран пункт фильтра Должности
-                if (numFilter == 2)
-                {
-                    Console.WriteLine("Введите подстроку для поиска по Должности:");
-                    filter.positionSubstring = Console.ReadLine();
-                }
-
-                //выбран пункт фильтра Даты подписания контракта работника
-                if (numFilter == 2)
-                {
-                    // Считывание Нижней границы диапазона даты подписания контракта работника
-                    bool done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите нижнюю дату подписания контракта работника (dd.mm.yyyy): ");
-                        done = DateTime.TryParse(Console.ReadLine(), out filter.signingDateLowerBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-
-                    // Считывание Вверхней границы диапазона даты подписания контракта работника
-                    done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите вверхнюю границу даты подписания контракта работника (dd.mm.yyyy): ");
-                        done = DateTime.TryParse(Console.ReadLine(), out filter.signingDateUpperBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-                }
-
-                //выбран пункт фильтра Срок действия контракта
-                if (numFilter == 3)
-                {
-                    // Считывание Нижней границы диапазона срока действия контракта работника
-                    bool done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите Нижнюю границу диапазона срока действия контракта работника: ");
-                        done = uint.TryParse(Console.ReadLine(), out filter.contractDurationLowerBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-
-                    // Считывание Вверхней границы диапазона срока действия контракта работника
-                    done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите Вверхнюю границу диапазона срока действия контракта работника: ");
-                        done = uint.TryParse(Console.ReadLine(), out filter.contractDurationUpperBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-                }
-
-                //выбран пункт фильтра Оклада
-                if (numFilter == 4)
-                {
-                    // Считывание Нижней границы диапазона оклада работника
-                    bool done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите Нижнюю границу диапазона оклада работника: ");
-                        done = uint.TryParse(Console.ReadLine(), out filter.salaryLowerBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-
-                    // Считывание Вверхней границы диапазона оклада работника
-                    done = false;
-                    do
-                    {
-                        Console.WriteLine("Введите Вверхнюю границу диапазона оклада работника: ");
-                        done = uint.TryParse(Console.ReadLine(), out filter.salaryUpperBound);
-                        if (!done) // if ввели неправильно
-                        {
-                            Console.WriteLine("Введите еще раз правильное значение!!!");
-                        }
-                    } while (!done); // Пока не ввели правильное значение
-                }
-
-
-                //выбран пункт Отменить
-                if (numFilter == 5)
-                {
-                    success = false;
-                    Console.WriteLine($"Выход из ввода значений фильтра");
-                }
             }
         }
 
@@ -356,5 +222,162 @@ namespace WorkerListProject
         public uint? contractDurationUpperBound;    // Верхняя граница диапазона срока действия контракта
         public float? salaryLowerBound;             // Нижняя граница диапазона оклада
         public float? salaryUpperBound;             // Верхняя граница диапазона оклада
+
+        /// <summary>
+        /// Ввод значений фильтра
+        /// </summary>
+        /// <param name="filter">Значения фильтра</param>
+        public static void SetFilter(ref Filter filter)
+        {
+
+            bool success = true;
+            bool done = false;
+            // Пока не вышли из фильтра
+            while (success)
+            {
+                Console.WriteLine($"Какой фильтр хотите задать?:{Environment.NewLine}" +
+                        $"1: ФИО{Environment.NewLine}" +
+                        $"2: Должность{Environment.NewLine}" +
+                        $"3: Дата подписания контракта{Environment.NewLine}" +
+                        $"4: Срока действия контракта{Environment.NewLine}" +
+                        $"4: Оклад{Environment.NewLine}" +
+                        $"5: Выйти из работы с фильтра{Environment.NewLine}");
+
+                // Считывание номера выбранного пункта
+                int numFilter = 0;
+                do
+                {
+                    Console.WriteLine("Выберите номер пункта для работы с фильтром:");
+
+                    done = int.TryParse(Console.ReadLine(), out numFilter);
+
+                    if (!done && (numFilter > 0 || numFilter <= 5)) // если не выбрали пункт
+                    {
+                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                    }
+                } while (!done && (numFilter > 0 || numFilter <= 5)); // Пока не ввели правильное значение
+
+                //выбран пункт фильтра ФИО
+                if (numFilter == 1)
+                {
+                    Console.WriteLine("Введите подстроку для поиска по ФИО:");
+                    filter.fullNameSubstring = Console.ReadLine();
+                }
+                //выбран пункт фильтра Должности
+                if (numFilter == 2)
+                {
+                    Console.WriteLine("Введите подстроку для поиска по Должности:");
+                    filter.positionSubstring = Console.ReadLine();
+                }
+
+                //выбран пункт фильтра Даты подписания контракта работника, Срока действия контракта ,Оклада
+                if (numFilter >= 2 && numFilter <= 4)
+                {
+                    SetFilterForUpperAndLower(ref filter, numFilter - 2, 0);
+                    SetFilterForUpperAndLower(ref filter, numFilter - 2, 1);
+                }
+
+                //выбран пункт Отменить
+                if (numFilter == 5)
+                {
+                    success = false;
+                    Console.WriteLine($"Выход из ввода значений фильтра");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Проверка и установка введенных значений фильтра для даты, срока действия и оклада
+        /// </summary>
+        /// <param name="filter">Значения фильтра</param>
+        /// <param name="type">Вид фильтра (Дата == 0, Срок действия контракта == 1, Оклад работника == 2)</param>
+        /// <param name="isUpperOrLower">Тип фильтра (вверхнее, нижнее)</param>
+        public static void SetFilterForUpperAndLower(ref Filter filter, int type, int isUpperOrLower)
+        {
+            // В зависимости от вида фильтра и типа фильтра строим строку для вывода сообщений
+            string tmpName = (isUpperOrLower == 0) ? "вверхнюю границу" : "нижнюю границу ";
+            DateTime tmpDate;
+            uint tmpUint;
+            float tmpFloat;
+            switch (type)
+            {
+                case 0:
+                    tmpName += "даты подписания контракта (dd.mm.yyyy)";
+                    break;
+                case 1:
+                    tmpName += "срока действия контракта";
+                    break;
+                case 2:
+                    tmpName += "оклада";
+                    break;
+            }
+
+
+            // Считывание Границы диапазонов
+            bool done = false;
+            do
+            {
+                Console.WriteLine($"Введите {tmpName}");
+                string input = Console.ReadLine();
+
+                // Если введена пустая строка
+                if (input == String.Empty)
+                {
+                    // Сохраняем значение null
+                    filter.signingDateUpperBound = (isUpperOrLower == 0 && type == 0) ? null : filter.signingDateUpperBound;
+                    filter.signingDateLowerBound = (isUpperOrLower == 1 && type == 0) ? null : filter.signingDateLowerBound;
+
+                    filter.contractDurationUpperBound = (isUpperOrLower == 0 && type == 1) ? null : filter.contractDurationUpperBound;
+                    filter.contractDurationLowerBound = (isUpperOrLower == 1 && type == 1) ? null : filter.contractDurationLowerBound;
+
+                    filter.salaryUpperBound = (isUpperOrLower == 0 && type == 2) ? null : filter.salaryUpperBound;
+                    filter.salaryLowerBound = (isUpperOrLower == 1 && type == 2) ? null : filter.salaryLowerBound;
+
+                    done = true;
+                }
+                // Если что-то введено
+                else
+                {
+                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    switch (type)
+                    {
+                        case 0:
+                            done = DateTime.TryParse(Console.ReadLine(), out tmpDate);
+                            if (!done)
+                            {
+                                Console.WriteLine("Введите еще раз правильное значение!!!");
+                                continue;
+                            }
+
+                            //сохраняем значения
+                            filter.signingDateUpperBound = (isUpperOrLower == 0 && type == 0) ? tmpDate : filter.signingDateUpperBound;
+                            filter.signingDateLowerBound = (isUpperOrLower == 1 && type == 0) ? tmpDate : filter.signingDateLowerBound;
+                            break;
+                        case 1:
+                            done = uint.TryParse(Console.ReadLine(), out tmpUint);
+                            if (!done)
+                            {
+                                Console.WriteLine("Введите еще раз правильное значение!!!");
+                                continue;
+                            }
+                            //сохраняем значения
+                            filter.contractDurationUpperBound = (isUpperOrLower == 0 && type == 1) ? tmpUint : filter.contractDurationUpperBound;
+                            filter.contractDurationLowerBound = (isUpperOrLower == 1 && type == 1) ? tmpUint : filter.contractDurationLowerBound;
+                            break;
+                        case 2:
+                            done = float.TryParse(Console.ReadLine(), out tmpFloat);
+                            if (!done)
+                            {
+                                Console.WriteLine("Введите еще раз правильное значение!!!");
+                                continue;
+                            }
+                            //сохраняем значения
+                            filter.salaryUpperBound = (isUpperOrLower == 0 && type == 2) ? tmpFloat : filter.salaryUpperBound;
+                            filter.salaryLowerBound = (isUpperOrLower == 1 && type == 2) ? tmpFloat : filter.salaryLowerBound;
+                            break;
+                    }
+                }
+            } while (!done); // Пока не ввели правильное значение
+        }
     }
 }
