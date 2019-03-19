@@ -294,16 +294,16 @@ namespace WorkerListProject
         /// <param name="workers">Список работников</param>
         public static Worker AddWorker(List<Worker> workers)
         {
-            // Считывание ФИО работника
+            // ФИО работника
             Worker worker = new Worker();
             Console.WriteLine("Введите ФИО работника: ");
             worker.fullName = Console.ReadLine();
 
-            // Считывание должности работника
+            // Должность работника
             Console.WriteLine("Введите должность работника: ");
             worker.position = Console.ReadLine();
 
-            // Считывание даты подписания контракта работника
+            // Дата подписания контракта работника
             bool success = false;
             do
             {
@@ -315,7 +315,7 @@ namespace WorkerListProject
                 }
             } while (!success); // Пока не ввели правильное значение
 
-            // Считывание времени действия контракта
+            // Время действия контракта
             do
             {
                 Console.WriteLine("Введите время действия контракта: ");
@@ -326,7 +326,7 @@ namespace WorkerListProject
                 }
             } while (!success); // Пока не ввели правильное значение
 
-            // Считывание оклада работника
+            // Оклад работника
             do
             {
                 Console.WriteLine("Введите оклад работника: ");
@@ -339,7 +339,6 @@ namespace WorkerListProject
 
             // Добавление нового работника в список
             workers.Add(worker);
-            // Вернуть нового работника
             return worker;
         }
     }
