@@ -14,7 +14,8 @@ namespace WorkerListProject
     /// <summary>
     /// Работник
     /// </summary>
-    struct Worker {
+    struct Worker
+    {
         /// <summary>
         /// Фамилия работника
         /// Значение должно быть непустым
@@ -49,7 +50,8 @@ namespace WorkerListProject
         /// Вывод одного работника
         /// </summary>
         /// <param type="Worker">Работник</param>
-        public void Print() {
+        public void Print()
+        {
             Console.WriteLine($"ФИО работника: {fullName} Должность: {position}" +
                 $" Дата подписания контракта: {signingDate} Срок действия контракта: {contractDuration}" +
                 $" Оклад: {salary}");
