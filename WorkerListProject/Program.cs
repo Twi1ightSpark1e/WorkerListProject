@@ -16,12 +16,12 @@ namespace WorkerListProject
             // Считывание номера выбранного пункта
             int numMenu = 0;
 
-
             // Пока не вышли из главного меню
             bool success = true;
             bool done = false;
             while (success) 
             {
+                // Пока не ввели правильное значение
                 numMenu = 0;
                 do
                 {
@@ -36,32 +36,40 @@ namespace WorkerListProject
                     // проверка введенного пункта главного меню
                     done = int.TryParse(Console.ReadLine(), out numMenu);
 
-                    if (!done && (numMenu > 0 || numMenu <= 5)) // если не выбрали пункт
+                    // если не выбрали пункт
+                    if (!done && (numMenu > 0 || numMenu <= 5))
                     {
                         Console.WriteLine("Введите еще раз правильное значение!!!");
                     }
-                } while (!done && (numMenu > 0 || numMenu <= 5)); // Пока не ввели правильное значение
+                } while (!done && (numMenu > 0 || numMenu <= 5)); 
 
                 // Переход по выбранному номеру меню
                 switch (numMenu)
                 {
-                    case 1:
+                    case 1: // Добавляем нового работника
                         Worker.AddWorker(workers);
                         break;
-                    case 2:
+                    
+                    case 2: // Выводим список работников
                         Worker.Print(workers);
                         break;
-                    case 3:
+                    
+                    case 3: // Задаем фильтрацию по списку работников
                         Filter.SetFilter(ref filter);
                         break;
-                    case 4:
+
+                    case 4: // Выводим список работников, используя фильтр
                         Worker.PrintFiltered(workers, filter);
                         break;
+                    
                     case 5:
+                        // Завершение работы программ
                         Console.WriteLine("Завершение работы программы");
                         return;
                 }
-                Console.WriteLine($"Сделано{Environment.NewLine}");
+
+                // Сообщение об завершении работы выбранной функции
+                Console.WriteLine($"Выход из пункта меню{Environment.NewLine}");
             }
         }
     }
