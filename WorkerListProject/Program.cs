@@ -138,40 +138,38 @@ namespace WorkerListProject
         /// <param name="filter">Значения фильтра</param>
         public static void PrintFiltered(List<Worker> workers, Filter filter)
         {
-            foreach (var worker in workers) // Цикличная проверка каждого рабочего
+            // Цикличная проверка каждого рабочего
+            foreach (var worker in workers)
             {
-                // Проверка: включает ли ФИО рабочего соответствующую строку из фильтра
+                // Соответствует ли ФИО работника фильтру?
                 if ((filter.fullNameSubstring != null) &&
                     (!worker.fullName.Contains(filter.fullNameSubstring)))
                 {
                     continue;
                 }
 
-                // Проверка: включает ли должность работника соответствующую строку из фильтра
+                // Соответствует ли должность работника фильтру?
                 if ((filter.positionSubstring != null) &&
                     (!worker.position.Contains(filter.positionSubstring)))
                 {
                     continue;
                 }
 
-                // Проверка: принадлежит ли дата подписания контракта
-                //           соответствующему диапазону из фильтра
+                // Соответствует ли дата подписания контракта фильтру?
                 if ((worker.signingDate < filter.signingDateLowerBound) ||
                     (worker.signingDate > filter.signingDateUpperBound))
                 {
                     continue;
                 }
 
-                // Проверка: принадлежит ли срок действия контракта
-                //           соответствующему диапазону из фильтра
+                // Соответствует ли срок действия контракта фильтру?
                 if ((worker.contractDuration < filter.contractDurationLowerBound) ||
                     (worker.contractDuration > filter.contractDurationUpperBound))
                 {
                     continue;
                 }
 
-                // Проверка: принадлежит ли оклад работника
-                //           соответствующему диапазону из фильтра
+                // Соответствует ли оклад работника фильтру?
                 if ((worker.salary < filter.salaryLowerBound) ||
                     (worker.salary > filter.salaryUpperBound))
                 {
