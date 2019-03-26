@@ -258,33 +258,36 @@ namespace WorkerListProject
         /// <param name="filter">Значения фильтра</param>
         public static void SetFilter(ref Filter filter)
         {
-
+            // Задаем первоначальные значения
             bool success = true;
             bool done = false;
+
             // Пока не вышли из фильтра
             while (success)
             {
+                // Выводим сообщение об вариации фильтра
                 Console.WriteLine($"Какой фильтр хотите задать?:{Environment.NewLine}" +
                         $"1: ФИО{Environment.NewLine}" +
                         $"2: Должность{Environment.NewLine}" +
                         $"3: Дата подписания контракта{Environment.NewLine}" +
                         $"4: Срока действия контракта{Environment.NewLine}" +
-                        $"4: Оклад{Environment.NewLine}" +
-                        $"5: Выйти из работы с фильтра{Environment.NewLine}");
+                        $"5: Оклад{Environment.NewLine}" +
+                        $"6: Выйти из работы с фильтра{Environment.NewLine}");
 
-                // Считывание номера выбранного пункта
+                // Считывание номера выбранного пункта, пока не ввели правильное значение
                 int numFilter = 0;
                 do
                 {
+                    // Считываем номер пункта для работы с фильтром
                     Console.WriteLine("Выберите номер пункта для работы с фильтром:");
-
                     done = int.TryParse(Console.ReadLine(), out numFilter);
 
-                    if (!done && (numFilter > 0 || numFilter <= 5)) // если не выбрали пункт
+                    // если не выбрали пункт
+                    if (!done && (numFilter > 0 || numFilter < 6))
                     {
                         Console.WriteLine("Введите еще раз правильное значение!!!");
                     }
-                } while (!done && (numFilter > 0 || numFilter <= 5)); // Пока не ввели правильное значение
+                } while (!done && (numFilter > 0 || numFilter < 6)); 
 
                 // Выбран пункт фильтра ФИО
                 if (numFilter == 1)
@@ -292,6 +295,7 @@ namespace WorkerListProject
                     Console.WriteLine("Введите подстроку для поиска по ФИО:");
                     filter.fullNameSubstring = Console.ReadLine();
                 }
+                
                 // Выбран пункт фильтра Должности
                 if (numFilter == 2)
                 {
@@ -299,15 +303,26 @@ namespace WorkerListProject
                     filter.positionSubstring = Console.ReadLine();
                 }
 
-                // Выбран пункт фильтра Даты подписания контракта работника, Срока действия контракта ,Оклада
-                if (numFilter >= 2 && numFilter <= 4)
+                // Выбран пункт фильтра Даты подписания контракта работника
+                if (numFilter == 3)
                 {
-                    SetFilterForUpperAndLower(ref filter, numFilter - 2, 0);
-                    SetFilterForUpperAndLower(ref filter, numFilter - 2, 1);
+                    SetFilterDate(ref filter);
+                }
+
+                // Выбран пункт фильтра Срока действия контракта
+                if (numFilter == 4)
+                {
+                    SetFilterContractDuration(ref filter);
+                }
+
+                // Выбран пункт фильтра Оклада
+                if (numFilter == 5)
+                {
+                    SetFilterSalary(ref filter);
                 }
 
                 // Выбран пункт "Отменить"
-                if (numFilter == 5)
+                if (numFilter == 6)
                 {
                     success = false;
                     Console.WriteLine($"Выход из ввода значений фильтра");
@@ -316,97 +331,181 @@ namespace WorkerListProject
         }
 
         /// <summary>
-        /// Проверка и установка введенных значений фильтра для даты, срока действия и оклада
+        /// Проверка и установка введенных значений фильтра для даты
         /// </summary>
         /// <param name="filter">Значения фильтра</param>
-        /// <param name="type">Вид фильтра (Дата == 0, Срок действия контракта == 1, Оклад работника == 2)</param>
-        /// <param name="isUpperOrLower">Тип фильтра (вверхнее, нижнее)</param>
-        public static void SetFilterForUpperAndLower(ref Filter filter, int type, int isUpperOrLower)
+        public static void SetFilterDate(ref Filter filter)
         {
-            // В зависимости от вида фильтра и типа фильтра строим строку для вывода сообщений
-            string tmpName = (isUpperOrLower == 0) ? "вверхнюю границу" : "нижнюю границу ";
+            // Задаем значение для вверхней границы
+            int isUpperOrLower = 0;
+
+            // Задаем временное значение даты
             DateTime tmpDate;
-            uint tmpUint;
-            float tmpFloat;
-            switch (type)
-            {
-                case 0:
-                    tmpName += "даты подписания контракта (dd.mm.yyyy)";
-                    break;
-                case 1:
-                    tmpName += "срока действия контракта";
-                    break;
-                case 2:
-                    tmpName += "оклада";
-                    break;
-            }
 
-
-            // Считывание Границы диапазонов
+            // Задаем об успешном сохранении значения фильтра
             bool done = false;
-            do
+
+            // Пока не сделали для вверхней и нижней границы
+            while (isUpperOrLower < 2)
             {
-                Console.WriteLine($"Введите {tmpName}");
+                // Задаем об успешном сохранении значения фильтра
+                done = false;
+
+                // Сообщение о вводе границы
+                Console.WriteLine("Введите " +((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю")+ " границу Даты подписания контракта работника (dd.mm.yyyy):");
+
+                // Считываем ввод с консоли
                 string input = Console.ReadLine();
 
-                // Если введена пустая строка
+                // Если пустая строка
                 if (input == String.Empty)
                 {
-                    // Сохраняем значение null
-                    filter.signingDateUpperBound = (isUpperOrLower == 0 && type == 0) ? null : filter.signingDateUpperBound;
-                    filter.signingDateLowerBound = (isUpperOrLower == 1 && type == 0) ? null : filter.signingDateLowerBound;
+                    // Сохраняем значение фильтра
+                    filter.signingDateUpperBound = (isUpperOrLower == 0) ? null : filter.signingDateUpperBound;
+                    filter.signingDateLowerBound = (isUpperOrLower == 1) ? null : filter.signingDateLowerBound;
 
-                    filter.contractDurationUpperBound = (isUpperOrLower == 0 && type == 1) ? null : filter.contractDurationUpperBound;
-                    filter.contractDurationLowerBound = (isUpperOrLower == 1 && type == 1) ? null : filter.contractDurationLowerBound;
-
-                    filter.salaryUpperBound = (isUpperOrLower == 0 && type == 2) ? null : filter.salaryUpperBound;
-                    filter.salaryLowerBound = (isUpperOrLower == 1 && type == 2) ? null : filter.salaryLowerBound;
-
+                    // Отмечаем, что успешно задали значение фильтра
                     done = true;
                 }
                 // Если что-то введено
                 else
                 {
                     // Проверяем выбранный тип поля фильтра на правильное значение
-                    switch (type)
-                    {
-                        case 0:
-                            done = DateTime.TryParse(Console.ReadLine(), out tmpDate);
-                            if (!done)
-                            {
-                                Console.WriteLine("Введите еще раз правильное значение!!!");
-                                continue;
-                            }
+                    done = DateTime.TryParse(input, out tmpDate);
 
-                            // Сохраняем значения
-                            filter.signingDateUpperBound = (isUpperOrLower == 0 && type == 0) ? tmpDate : filter.signingDateUpperBound;
-                            filter.signingDateLowerBound = (isUpperOrLower == 1 && type == 0) ? tmpDate : filter.signingDateLowerBound;
-                            break;
-                        case 1:
-                            done = uint.TryParse(Console.ReadLine(), out tmpUint);
-                            if (!done)
-                            {
-                                Console.WriteLine("Введите еще раз правильное значение!!!");
-                                continue;
-                            }
-                            // Сохраняем значения
-                            filter.contractDurationUpperBound = (isUpperOrLower == 0 && type == 1) ? tmpUint : filter.contractDurationUpperBound;
-                            filter.contractDurationLowerBound = (isUpperOrLower == 1 && type == 1) ? tmpUint : filter.contractDurationLowerBound;
-                            break;
-                        case 2:
-                            done = float.TryParse(Console.ReadLine(), out tmpFloat);
-                            if (!done)
-                            {
-                                Console.WriteLine("Введите еще раз правильное значение!!!");
-                                continue;
-                            }
-                            // Сохраняем значения
-                            filter.salaryUpperBound = (isUpperOrLower == 0 && type == 2) ? tmpFloat : filter.salaryUpperBound;
-                            filter.salaryLowerBound = (isUpperOrLower == 1 && type == 2) ? tmpFloat : filter.salaryLowerBound;
-                            break;
+                    // Если неправильное значение - еще раз запускаем проверку
+                    if (!done)
+                    {
+                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        continue;
                     }
+
+                    // Сохраняем значение фильтра
+                    filter.signingDateUpperBound = (isUpperOrLower == 0) ? tmpDate : filter.signingDateUpperBound;
+                    filter.signingDateLowerBound = (isUpperOrLower == 1) ? tmpDate : filter.signingDateLowerBound;
                 }
-            } while (!done); // Пока не ввели правильное значение
+
+                isUpperOrLower++;
+            }
+        }
+
+        /// <summary>
+        /// Проверка и установка введенных значений фильтра для срока действия
+        /// </summary>
+        /// <param name="filter">Значения фильтра</param>
+        public static void SetFilterContractDuration(ref Filter filter)
+        {
+            // Задаем значение для вверхней границы
+            int isUpperOrLower = 0;
+
+            // Задаем временное значение даты
+            uint tmpUint;
+
+            // Задаем об успешном сохранении значения фильтра
+            bool done = false;
+
+            // Пока не сделали для вверхней и нижней границы
+            while (isUpperOrLower < 2)
+            {
+                // Задаем об успешном сохранении значения фильтра
+                done = false;
+
+                // Сообщение о вводе границы
+                Console.WriteLine("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу");
+
+                // Считываем ввод с консоли
+                string input = Console.ReadLine();
+
+                // Если пустая строка
+                if (input == String.Empty)
+                {
+                    // Сохраняем значение фильтра
+                    filter.contractDurationUpperBound = (isUpperOrLower == 0) ? null : filter.contractDurationUpperBound;
+                    filter.contractDurationLowerBound = (isUpperOrLower == 1) ? null : filter.contractDurationLowerBound;
+
+                    // Отмечаем, что успешно задали значение фильтра
+                    done = true;
+                }
+                // Если что-то введено
+                else
+                {
+                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    done = uint.TryParse(input, out tmpUint);
+
+                    // Если неправильное значение - еще раз запускаем проверку
+                    if (!done)
+                    {
+                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        continue;
+                    }
+
+                    // Сохраняем значение фильтра
+                    filter.contractDurationUpperBound = (isUpperOrLower == 0) ? tmpUint : filter.contractDurationUpperBound;
+                    filter.contractDurationLowerBound = (isUpperOrLower == 1) ? tmpUint : filter.contractDurationLowerBound;
+                }
+
+                isUpperOrLower++;
+            }
+        }
+
+        /// <summary>
+        /// Проверка и установка введенных значений фильтра для срока действия
+        /// </summary>
+        /// <param name="filter">Значения фильтра</param>
+        public static void SetFilterSalary(ref Filter filter)
+        {
+            // Задаем значение для вверхней границы
+            int isUpperOrLower = 0;
+
+            // Задаем временное значение даты
+            float tmpFloat;
+
+            // Задаем об успешном сохранении значения фильтра
+            bool done = false;
+
+            // Пока не сделали для вверхней и нижней границы
+            while (isUpperOrLower < 2)
+            {
+                // Задаем об успешном сохранении значения фильтра
+                done = false;
+
+                // Сообщение о вводе границы
+                Console.WriteLine("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу");
+
+                // Считываем ввод с консоли
+                string input = Console.ReadLine();
+
+                // Если пустая строка
+                if (input == String.Empty)
+                {
+                    // Сохраняем значение фильтра
+                    filter.salaryUpperBound = (isUpperOrLower == 0) ? null : filter.salaryUpperBound;
+                    filter.salaryLowerBound = (isUpperOrLower == 1) ? null : filter.salaryLowerBound;
+
+                    // Отмечаем, что успешно задали значение фильтра
+                    done = true;
+                }
+                // Если что-то введено
+                else
+                {
+                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    done = float.TryParse(input, out tmpFloat);
+
+                    // Если неправильное значение - еще раз запускаем проверку
+                    if (!done)
+                    {
+                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        continue;
+                    }
+
+                    // Сохраняем значение фильтра
+                    filter.salaryUpperBound = (isUpperOrLower == 0) ? tmpFloat : filter.salaryUpperBound;
+                    filter.salaryLowerBound = (isUpperOrLower == 1) ? tmpFloat : filter.salaryLowerBound;
+                }
+
+                // Другой тип границы 
+                isUpperOrLower++;
+            }
         }
     }
 }
