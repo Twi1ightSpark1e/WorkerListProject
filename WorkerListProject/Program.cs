@@ -111,12 +111,14 @@ namespace WorkerListProject
         /// <summary>
         /// Вывод одного работника
         /// </summary>
-        /// <param type="Worker">Работник</param>
         public void Print()
         {
-            Console.WriteLine($"ФИО работника: {fullName} Должность: {position}" +
-                $" Дата подписания контракта: {signingDate} Срок действия контракта: {contractDuration}" +
-                $" Оклад: {salary}");
+            Console.WriteLine(
+                $"ФИО работника: {fullName}{Environment.NewLine}"+
+                $" Должность: {position}{Environment.NewLine}" +
+                $" Дата подписания контракта: {signingDate}{Environment.NewLine}" +
+                $"Срок действия контракта: {contractDuration}{Environment.NewLine}" +
+                $" Оклад: {salary}{Environment.NewLine}{Environment.NewLine}");
         }
 
         /// <summary>
