@@ -86,7 +86,7 @@ namespace WorkerListProject
         string fullName;
 
         /// <summary>
-        /// Вывод текущего работника
+        /// Должность работника
         /// </summary>
         string position;
 
