@@ -278,27 +278,27 @@ namespace WorkerListProject
                     }
                 } while (!done && (numFilter > 0 || numFilter <= 5)); // Пока не ввели правильное значение
 
-                //выбран пункт фильтра ФИО
+                // Выбран пункт фильтра ФИО
                 if (numFilter == 1)
                 {
                     Console.WriteLine("Введите подстроку для поиска по ФИО:");
                     filter.fullNameSubstring = Console.ReadLine();
                 }
-                //выбран пункт фильтра Должности
+                // Выбран пункт фильтра Должности
                 if (numFilter == 2)
                 {
                     Console.WriteLine("Введите подстроку для поиска по Должности:");
                     filter.positionSubstring = Console.ReadLine();
                 }
 
-                //выбран пункт фильтра Даты подписания контракта работника, Срока действия контракта ,Оклада
+                // Выбран пункт фильтра Даты подписания контракта работника, Срока действия контракта ,Оклада
                 if (numFilter >= 2 && numFilter <= 4)
                 {
                     SetFilterForUpperAndLower(ref filter, numFilter - 2, 0);
                     SetFilterForUpperAndLower(ref filter, numFilter - 2, 1);
                 }
 
-                //выбран пункт Отменить
+                // Выбран пункт "Отменить"
                 if (numFilter == 5)
                 {
                     success = false;
@@ -370,7 +370,7 @@ namespace WorkerListProject
                                 continue;
                             }
 
-                            //сохраняем значения
+                            // Сохраняем значения
                             filter.signingDateUpperBound = (isUpperOrLower == 0 && type == 0) ? tmpDate : filter.signingDateUpperBound;
                             filter.signingDateLowerBound = (isUpperOrLower == 1 && type == 0) ? tmpDate : filter.signingDateLowerBound;
                             break;
@@ -381,7 +381,7 @@ namespace WorkerListProject
                                 Console.WriteLine("Введите еще раз правильное значение!!!");
                                 continue;
                             }
-                            //сохраняем значения
+                            // Сохраняем значения
                             filter.contractDurationUpperBound = (isUpperOrLower == 0 && type == 1) ? tmpUint : filter.contractDurationUpperBound;
                             filter.contractDurationLowerBound = (isUpperOrLower == 1 && type == 1) ? tmpUint : filter.contractDurationLowerBound;
                             break;
@@ -392,7 +392,7 @@ namespace WorkerListProject
                                 Console.WriteLine("Введите еще раз правильное значение!!!");
                                 continue;
                             }
-                            //сохраняем значения
+                            // Сохраняем значения
                             filter.salaryUpperBound = (isUpperOrLower == 0 && type == 2) ? tmpFloat : filter.salaryUpperBound;
                             filter.salaryLowerBound = (isUpperOrLower == 1 && type == 2) ? tmpFloat : filter.salaryLowerBound;
                             break;
