@@ -532,7 +532,7 @@ namespace WorkerListProject
         /// <param name="message">Выводимое сообщение</param>
         public static void PrintError(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(message);
             Console.ResetColor();
         }
@@ -540,6 +540,7 @@ namespace WorkerListProject
         /// <summary>
         /// Вывод заголовка
         /// </summary>
+        /// <param name="message">Выводимое сообщение</param>
         public static void PrintCaption(string message)
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -550,9 +551,10 @@ namespace WorkerListProject
         /// <<summary>
         /// Вывод названия поля рабочего
         /// </summary>
+        /// <param name="message">Выводимое сообщение</param>
         public static void PrintFieldName(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Write(message);
             Console.ResetColor();
         }
