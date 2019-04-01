@@ -210,7 +210,7 @@ namespace WorkerListProject
             bool success = false;
             do
             {
-                PrettyPrinter.PrintFieldName("Введите дату подписания контракта работника(dd.mm.yyyy): ");
+                PrettyPrinter.PrintFieldName("Введите дату подписания контракта работника (dd.mm.yyyy): ");
                 success = DateTime.TryParse(Console.ReadLine(), out worker.signingDate);
                 if (!success) // if ввели неправильно
                 {
@@ -296,7 +296,7 @@ namespace WorkerListProject
                     {
                         PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                     }
-                } while (!done && (numFilter > 0 || numFilter < 6)); 
+                } while (!done && (numFilter > 0 || numFilter < 6));
                 Console.WriteLine();
 
                 // Выбран пункт фильтра ФИО
