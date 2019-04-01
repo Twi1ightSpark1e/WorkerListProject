@@ -45,7 +45,7 @@ namespace WorkerListProject
                 switch (numMenu)
                 {
                     case 1: // Добавляем нового работника
-                        Worker.AddWorker(workers);
+                        Worker.Add(workers);
                         break;
 
                     case 2: // Выводим список работников
@@ -195,7 +195,7 @@ namespace WorkerListProject
         /// Добавление одного элемента структуры в список работников
         /// </summary>
         /// <param name="workers">Список работников</param>
-        public static Worker AddWorker(List<Worker> workers)
+        public static Worker Add(List<Worker> workers)
         {
             // ФИО работника
             Worker worker = new Worker();
@@ -481,7 +481,7 @@ namespace WorkerListProject
                 done = false;
 
                 // Сообщение о вводе границы
-                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу: ");
+                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "верхнюю" : "нижнюю") + " границу: ");
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
