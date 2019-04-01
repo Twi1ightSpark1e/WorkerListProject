@@ -19,29 +19,31 @@ namespace WorkerListProject
             // Пока не вышли из главного меню
             bool success = true;
             bool done = false;
-            while (success) 
+            while (success)
             {
                 // Пока не ввели правильное значение
                 numMenu = 0;
                 do
                 {
                     // Вывод сообщения о главном меню работы с программой
-                    Console.WriteLine($"Выберите пункт главного меню:{Environment.NewLine}" +
-                                $"1: Добавить сотрудника{Environment.NewLine}" +
-                                $"2: Вывод всех работников{Environment.NewLine}" +
-                                $"3: Задать фильтрацию{Environment.NewLine}" +
-                                $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
-                                $"5: Завершить работу программы{Environment.NewLine}");
+                    PrettyPrinter.PrintCaption($"Главное меню:{Environment.NewLine}");
+                    Console.Write($"1: Добавить сотрудника{Environment.NewLine}" +
+                                  $"2: Вывод всех работников{Environment.NewLine}" +
+                                  $"3: Задать фильтрацию{Environment.NewLine}" +
+                                  $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
+                                  $"5: Завершить работу программы{Environment.NewLine}");
+                    PrettyPrinter.PrintCaption("Выберите пункт меню: ");
 
                     // проверка введенного пункта главного меню
                     done = int.TryParse(Console.ReadLine(), out numMenu);
 
                     // если не выбрали пункт
-                    if (!done && (numMenu > 0 || numMenu <= 5))
+                    if (!done || (numMenu < 1 || numMenu > 5))
                     {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                     }
-                } while (!done && (numMenu > 0 || numMenu <= 5)); 
+                    Console.WriteLine();
+                } while (!done || (numMenu < 1 || numMenu > 5));
 
                 // Переход по выбранному номеру меню
                 switch (numMenu)
@@ -49,11 +51,11 @@ namespace WorkerListProject
                     case 1: // Добавляем нового работника
                         Worker.AddWorker(workers);
                         break;
-                    
+
                     case 2: // Выводим список работников
                         Worker.Print(workers);
                         break;
-                    
+
                     case 3: // Задаем фильтрацию по списку работников
                         Filter.SetFilter(ref filter);
                         break;
@@ -61,15 +63,12 @@ namespace WorkerListProject
                     case 4: // Выводим список работников, используя фильтр
                         Worker.PrintFiltered(workers, filter);
                         break;
-                    
+
                     case 5:
                         // Завершение работы программ
                         Console.WriteLine("Завершение работы программы");
                         return;
                 }
-
-                // Сообщение об завершении работы выбранной функции
-                Console.WriteLine($"Выход из пункта меню{Environment.NewLine}");
             }
         }
     }
@@ -113,12 +112,25 @@ namespace WorkerListProject
         /// </summary>
         public void Print()
         {
-            Console.WriteLine(
-                $"ФИО работника: {fullName}{Environment.NewLine}"+
-                $" Должность: {position}{Environment.NewLine}" +
-                $" Дата подписания контракта: {signingDate}{Environment.NewLine}" +
-                $"Срок действия контракта: {contractDuration}{Environment.NewLine}" +
-                $" Оклад: {salary}{Environment.NewLine}{Environment.NewLine}");
+            // Вывод ФИО работника
+            PrettyPrinter.PrintFieldName("ФИО работника: ");
+            Console.WriteLine($"{fullName}");
+
+            // Вывод должности
+            PrettyPrinter.PrintFieldName("Должность: ");
+            Console.WriteLine($"{position}");
+
+            // Вывод даты подписания контракта
+            PrettyPrinter.PrintFieldName("Дата подписания контракта: ");
+            Console.WriteLine($"{signingDate}");
+
+            // Вывод срока действия контракта
+            PrettyPrinter.PrintFieldName("Срок действия контракта: ");
+            Console.WriteLine($"{contractDuration}");
+
+            // Вывод оклада
+            PrettyPrinter.PrintFieldName("Оклад: ");
+            Console.WriteLine($"{salary}{Environment.NewLine}");
         }
 
         /// <summary>
@@ -191,49 +203,50 @@ namespace WorkerListProject
         {
             // ФИО работника
             Worker worker = new Worker();
-            Console.WriteLine("Введите ФИО работника: ");
+            PrettyPrinter.PrintFieldName("Введите ФИО работника: ");
             worker.fullName = Console.ReadLine();
 
             // Должность работника
-            Console.WriteLine("Введите должность работника: ");
+            PrettyPrinter.PrintFieldName("Введите должность работника: ");
             worker.position = Console.ReadLine();
 
             // Дата подписания контракта работника
             bool success = false;
             do
             {
-                Console.WriteLine("Введите дату подписания контракта работника (dd.mm.yyyy): ");
+                PrettyPrinter.PrintFieldName("Введите дату подписания контракта работника(dd.mm.yyyy): ");
                 success = DateTime.TryParse(Console.ReadLine(), out worker.signingDate);
                 if (!success) // if ввели неправильно
                 {
-                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                    PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                 }
             } while (!success); // Пока не ввели правильное значение
 
             // Время действия контракта
             do
             {
-                Console.WriteLine("Введите время действия контракта: ");
+                PrettyPrinter.PrintFieldName("Введите время действия контракта: ");
                 success = uint.TryParse(Console.ReadLine(), out worker.contractDuration);
                 if (!success) // if ввели неправильно
                 {
-                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                    PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                 }
             } while (!success); // Пока не ввели правильное значение
 
             // Оклад работника
             do
             {
-                Console.WriteLine("Введите оклад работника: ");
+                PrettyPrinter.PrintFieldName("Введите оклад работника: ");
                 success = float.TryParse(Console.ReadLine(), out worker.salary);
                 if (!success) // if ввели неправильно
                 {
-                    Console.WriteLine("Введите еще раз правильное значение!!!");
+                    PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                 }
             } while (!success); // Пока не ввели правильное значение
 
             // Добавление нового работника в список
             workers.Add(worker);
+            Console.WriteLine();
             return worker;
         }
     }
@@ -266,40 +279,41 @@ namespace WorkerListProject
             while (success)
             {
                 // Выводим сообщение об вариации фильтра
-                Console.WriteLine($"Какой фильтр хотите задать?:{Environment.NewLine}" +
-                        $"1: ФИО{Environment.NewLine}" +
-                        $"2: Должность{Environment.NewLine}" +
-                        $"3: Дата подписания контракта{Environment.NewLine}" +
-                        $"4: Срока действия контракта{Environment.NewLine}" +
-                        $"5: Оклад{Environment.NewLine}" +
-                        $"6: Выйти из работы с фильтра{Environment.NewLine}");
+                PrettyPrinter.PrintCaption($"Возможные поля фильтра:{Environment.NewLine}");
+                Console.Write($"1: ФИО{Environment.NewLine}" +
+                              $"2: Должность{Environment.NewLine}" +
+                              $"3: Дата подписания контракта{Environment.NewLine}" +
+                              $"4: Срока действия контракта{Environment.NewLine}" +
+                              $"5: Оклад{Environment.NewLine}" +
+                              $"6: Выйти из работы с фильтра{Environment.NewLine}");
 
                 // Считывание номера выбранного пункта, пока не ввели правильное значение
                 int numFilter = 0;
                 do
                 {
                     // Считываем номер пункта для работы с фильтром
-                    Console.WriteLine("Выберите номер пункта для работы с фильтром:");
+                    PrettyPrinter.PrintCaption("Выберите номер пункта для работы с фильтром: ");
                     done = int.TryParse(Console.ReadLine(), out numFilter);
 
                     // если не выбрали пункт
                     if (!done && (numFilter > 0 || numFilter < 6))
                     {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                     }
                 } while (!done && (numFilter > 0 || numFilter < 6)); 
+                Console.WriteLine();
 
                 // Выбран пункт фильтра ФИО
                 if (numFilter == 1)
                 {
-                    Console.WriteLine("Введите подстроку для поиска по ФИО:");
+                    PrettyPrinter.PrintFieldName("Введите подстроку для поиска по ФИО: ");
                     filter.fullNameSubstring = Console.ReadLine();
                 }
-                
+
                 // Выбран пункт фильтра Должности
                 if (numFilter == 2)
                 {
-                    Console.WriteLine("Введите подстроку для поиска по Должности:");
+                    PrettyPrinter.PrintFieldName("Введите подстроку для поиска по должности: ");
                     filter.positionSubstring = Console.ReadLine();
                 }
 
@@ -325,7 +339,6 @@ namespace WorkerListProject
                 if (numFilter == 6)
                 {
                     success = false;
-                    Console.WriteLine($"Выход из ввода значений фильтра");
                 }
             }
         }
@@ -352,7 +365,7 @@ namespace WorkerListProject
                 done = false;
 
                 // Сообщение о вводе границы
-                Console.WriteLine("Введите " +((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю")+ " границу Даты подписания контракта работника (dd.mm.yyyy):");
+                PrettyPrinter.PrintFieldName("Введите " +((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю")+ " границу (dd.mm.yyyy): ");
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -376,7 +389,7 @@ namespace WorkerListProject
                     // Если неправильное значение - еще раз запускаем проверку
                     if (!done)
                     {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                         continue;
                     }
 
@@ -387,6 +400,7 @@ namespace WorkerListProject
 
                 isUpperOrLower++;
             }
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -411,7 +425,7 @@ namespace WorkerListProject
                 done = false;
 
                 // Сообщение о вводе границы
-                Console.WriteLine("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу");
+                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу: ");
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -435,7 +449,7 @@ namespace WorkerListProject
                     // Если неправильное значение - еще раз запускаем проверку
                     if (!done)
                     {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                         continue;
                     }
 
@@ -446,6 +460,7 @@ namespace WorkerListProject
 
                 isUpperOrLower++;
             }
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -470,7 +485,7 @@ namespace WorkerListProject
                 done = false;
 
                 // Сообщение о вводе границы
-                Console.WriteLine("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу");
+                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу: ");
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -494,7 +509,7 @@ namespace WorkerListProject
                     // Если неправильное значение - еще раз запускаем проверку
                     if (!done)
                     {
-                        Console.WriteLine("Введите еще раз правильное значение!!!");
+                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                         continue;
                     }
 
@@ -506,6 +521,44 @@ namespace WorkerListProject
                 // Другой тип границы 
                 isUpperOrLower++;
             }
+            Console.WriteLine();
+        }
+    }
+
+    /// <summary>
+    /// Набор методов для красивого вывода сообщений
+    /// </summary>
+    class PrettyPrinter
+    {
+        /// <summary>
+        /// Вывод ошибки
+        /// </summary>
+        /// <param name="message">Выводимое сообщение</param>
+        public static void PrintError(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(message);
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Вывод заголовка
+        /// </summary>
+        public static void PrintCaption(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write(message);
+            Console.ResetColor();
+        }
+
+        /// <<summary>
+        /// Вывод названия поля рабочего
+        /// </summary>
+        public static void PrintFieldName(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(message);
+            Console.ResetColor();
         }
     }
 }
