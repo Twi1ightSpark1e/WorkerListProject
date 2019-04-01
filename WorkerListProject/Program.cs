@@ -316,19 +316,25 @@ namespace WorkerListProject
                 // Выбран пункт фильтра Даты подписания контракта работника
                 if (numFilter == 3)
                 {
-                    SetFilterDate(ref filter);
+                    SetDate("Введите верхнюю границу (dd.mm.yyyy): ", ref filter.signingDateUpperBound);
+                    SetDate("Введите нижнюю границу (dd.mm.yyyy): ", ref filter.signingDateLowerBound);
+                    Console.WriteLine();
                 }
 
                 // Выбран пункт фильтра Срока действия контракта
                 if (numFilter == 4)
                 {
-                    SetFilterContractDuration(ref filter);
+                    SetUInt("Введите верхнюю границу: ", ref filter.contractDurationUpperBound);
+                    SetUInt("Введите нижнюю границу: ", ref filter.contractDurationLowerBound);
+                    Console.WriteLine();
                 }
 
                 // Выбран пункт фильтра Оклада
                 if (numFilter == 5)
                 {
-                    SetFilterSalary(ref filter);
+                    SetFloat("Введите верхнюю границу: ", ref filter.salaryUpperBound);
+                    SetFloat("Введите нижнюю границу: ", ref filter.salaryLowerBound);
+                    Console.WriteLine();
                 }
 
                 // Выбран пункт "Отменить"
@@ -340,28 +346,25 @@ namespace WorkerListProject
         }
 
         /// <summary>
-        /// Проверка и установка введенных значений фильтра для даты
+        /// Проверка и установка введенной даты
         /// </summary>
-        /// <param name="filter">Значения фильтра</param>
-        public static void SetFilterDate(ref Filter filter)
+        /// <param name="message">Сообщение-приглашение ввода значения</param>
+        /// <param name="value">Значение, которое необходимо считать</param>
+        public static void SetDate(string message, ref DateTime? value)
         {
-            // Задаем значение для вверхней границы
-            int isUpperOrLower = 0;
-
             // Задаем временное значение даты
             DateTime tmpDate;
 
             // Задаем об успешном сохранении значения фильтра
             bool done = false;
 
-            // Пока не сделали для вверхней и нижней границы
-            while (isUpperOrLower < 2)
+            while (!done)
             {
-                // Задаем об успешном сохранении значения фильтра
+                // Задаем об успешном сохранении значения
                 done = false;
 
-                // Сообщение о вводе границы
-                PrettyPrinter.PrintFieldName("Введите " +((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю")+ " границу (dd.mm.yyyy): ");
+                // Вывод сообщения-приглашения ввода значения
+                PrettyPrinter.PrintFieldName(message);
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -369,17 +372,16 @@ namespace WorkerListProject
                 // Если пустая строка
                 if (input == String.Empty)
                 {
-                    // Сохраняем значение фильтра
-                    filter.signingDateUpperBound = (isUpperOrLower == 0) ? null : filter.signingDateUpperBound;
-                    filter.signingDateLowerBound = (isUpperOrLower == 1) ? null : filter.signingDateLowerBound;
+                    // Сохраняем значение
+                    value = null;
 
-                    // Отмечаем, что успешно задали значение фильтра
+                    // Отмечаем, что успешно задали значение
                     done = true;
                 }
                 // Если что-то введено
                 else
                 {
-                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    // Проверяем введенное значение на правильность
                     done = DateTime.TryParse(input, out tmpDate);
 
                     // Если неправильное значение - еще раз запускаем проверку
@@ -389,39 +391,33 @@ namespace WorkerListProject
                         continue;
                     }
 
-                    // Сохраняем значение фильтра
-                    filter.signingDateUpperBound = (isUpperOrLower == 0) ? tmpDate : filter.signingDateUpperBound;
-                    filter.signingDateLowerBound = (isUpperOrLower == 1) ? tmpDate : filter.signingDateLowerBound;
+                    // Сохраняем значение
+                    value = tmpDate;
                 }
-
-                isUpperOrLower++;
             }
-            Console.WriteLine();
         }
 
         /// <summary>
-        /// Проверка и установка введенных значений фильтра для срока действия
+        /// Проверка и установка введенного целочисленного значения
         /// </summary>
-        /// <param name="filter">Значения фильтра</param>
-        public static void SetFilterContractDuration(ref Filter filter)
+        /// <param name="message">Сообщение-приглашение ввода значения</param>
+        /// <param name="value">Значение, в которое необходимо считать</param>
+        public static void SetUInt(string message, ref uint? value)
         {
-            // Задаем значение для вверхней границы
-            int isUpperOrLower = 0;
-
-            // Задаем временное значение даты
+            // Задаем временное значение
             uint tmpUint;
 
-            // Задаем об успешном сохранении значения фильтра
+            // Задаем об успешном сохранении значения
             bool done = false;
 
-            // Пока не сделали для вверхней и нижней границы
-            while (isUpperOrLower < 2)
+            // Пока не считали правильное значение
+            while (!done)
             {
-                // Задаем об успешном сохранении значения фильтра
+                // Задаем об успешном сохранении значения
                 done = false;
 
-                // Сообщение о вводе границы
-                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "вверхнюю" : "нижнюю") + " границу: ");
+                // Вывод сообщения-приглашения ввода значения
+                PrettyPrinter.PrintFieldName(message);
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -429,17 +425,16 @@ namespace WorkerListProject
                 // Если пустая строка
                 if (input == String.Empty)
                 {
-                    // Сохраняем значение фильтра
-                    filter.contractDurationUpperBound = (isUpperOrLower == 0) ? null : filter.contractDurationUpperBound;
-                    filter.contractDurationLowerBound = (isUpperOrLower == 1) ? null : filter.contractDurationLowerBound;
+                    // Сохраняем значение
+                    value = null;
 
-                    // Отмечаем, что успешно задали значение фильтра
+                    // Отмечаем, что успешно задали значение
                     done = true;
                 }
                 // Если что-то введено
                 else
                 {
-                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    // Проверяем введенное значение на правильность
                     done = uint.TryParse(input, out tmpUint);
 
                     // Если неправильное значение - еще раз запускаем проверку
@@ -449,39 +444,33 @@ namespace WorkerListProject
                         continue;
                     }
 
-                    // Сохраняем значение фильтра
-                    filter.contractDurationUpperBound = (isUpperOrLower == 0) ? tmpUint : filter.contractDurationUpperBound;
-                    filter.contractDurationLowerBound = (isUpperOrLower == 1) ? tmpUint : filter.contractDurationLowerBound;
+                    // Сохраняем значение
+                    value = tmpUint;
                 }
-
-                isUpperOrLower++;
             }
-            Console.WriteLine();
         }
 
         /// <summary>
-        /// Проверка и установка введенных значений фильтра для срока действия
+        /// Проверка и установка введенного дробного числа
         /// </summary>
-        /// <param name="filter">Значения фильтра</param>
-        public static void SetFilterSalary(ref Filter filter)
+        /// <param name="message">Сообщение-приглашение ввода значения</param>
+        /// <param name="value">Значение, в которое необходимо считать</param>
+        public static void SetFloat(string message, ref float? value)
         {
-            // Задаем значение для вверхней границы
-            int isUpperOrLower = 0;
-
-            // Задаем временное значение даты
+            // Задаем временное значение
             float tmpFloat;
 
-            // Задаем об успешном сохранении значения фильтра
+            // Задаем об успешном сохранении значения
             bool done = false;
 
-            // Пока не сделали для вверхней и нижней границы
-            while (isUpperOrLower < 2)
+            // Пока не считали правильное значение
+            while (!done)
             {
-                // Задаем об успешном сохранении значения фильтра
+                // Задаем об успешном сохранении значения
                 done = false;
 
-                // Сообщение о вводе границы
-                PrettyPrinter.PrintFieldName("Введите " + ((isUpperOrLower == 0) ? "верхнюю" : "нижнюю") + " границу: ");
+                // Вывод сообщения-приглашения ввода значения
+                PrettyPrinter.PrintFieldName(message);
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
@@ -489,17 +478,16 @@ namespace WorkerListProject
                 // Если пустая строка
                 if (input == String.Empty)
                 {
-                    // Сохраняем значение фильтра
-                    filter.salaryUpperBound = (isUpperOrLower == 0) ? null : filter.salaryUpperBound;
-                    filter.salaryLowerBound = (isUpperOrLower == 1) ? null : filter.salaryLowerBound;
+                    // Сохраняем значение
+                    value = null;
 
-                    // Отмечаем, что успешно задали значение фильтра
+                    // Отмечаем, что успешно задали значение
                     done = true;
                 }
                 // Если что-то введено
                 else
                 {
-                    // Проверяем выбранный тип поля фильтра на правильное значение
+                    // Проверяем введенное значение на правильность
                     done = float.TryParse(input, out tmpFloat);
 
                     // Если неправильное значение - еще раз запускаем проверку
@@ -509,15 +497,10 @@ namespace WorkerListProject
                         continue;
                     }
 
-                    // Сохраняем значение фильтра
-                    filter.salaryUpperBound = (isUpperOrLower == 0) ? tmpFloat : filter.salaryUpperBound;
-                    filter.salaryLowerBound = (isUpperOrLower == 1) ? tmpFloat : filter.salaryLowerBound;
+                    // Сохраняем значение
+                    value = tmpFloat;
                 }
-
-                // Другой тип границы 
-                isUpperOrLower++;
             }
-            Console.WriteLine();
         }
     }
 
