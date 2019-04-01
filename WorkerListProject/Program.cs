@@ -13,13 +13,11 @@ namespace WorkerListProject
             // Инициализируем фильтр
             Filter filter = new Filter();
 
-            // Считывание номера выбранного пункта
-            int numMenu = 0;
+            int numMenu = 0;     // номер выбранного пункта меню
+            bool done = false;   // флаг успешного ввода
 
             // Пока не вышли из главного меню
-            bool success = true;
-            bool done = false;
-            while (success)
+            while (true)
             {
                 // Пока не ввели правильное значение
                 numMenu = 0;
@@ -29,15 +27,13 @@ namespace WorkerListProject
                     PrettyPrinter.PrintCaption($"Главное меню:{Environment.NewLine}");
                     Console.Write($"1: Добавить сотрудника{Environment.NewLine}" +
                                   $"2: Вывод всех работников{Environment.NewLine}" +
-                                  $"3: Задать фильтрацию{Environment.NewLine}" +
+                                  $"3: Ввод значений фильтра{Environment.NewLine}" +
                                   $"4: Вывод списка работников по заданному фильтру {Environment.NewLine}" +
                                   $"5: Завершить работу программы{Environment.NewLine}");
                     PrettyPrinter.PrintCaption("Выберите пункт меню: ");
 
                     // проверка введенного пункта главного меню
                     done = int.TryParse(Console.ReadLine(), out numMenu);
-
-                    // если не выбрали пункт
                     if (!done || (numMenu < 1 || numMenu > 5))
                     {
                         PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
@@ -45,7 +41,7 @@ namespace WorkerListProject
                     Console.WriteLine();
                 } while (!done || (numMenu < 1 || numMenu > 5));
 
-                // Переход по выбранному номеру меню
+                // Обработка по выбранному номеру меню
                 switch (numMenu)
                 {
                     case 1: // Добавляем нового работника
@@ -56,7 +52,7 @@ namespace WorkerListProject
                         Worker.Print(workers);
                         break;
 
-                    case 3: // Задаем фильтрацию по списку работников
+                    case 3: // Ввод значений фильтра
                         Filter.SetFilter(ref filter);
                         break;
 
