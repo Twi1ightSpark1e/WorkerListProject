@@ -316,24 +316,24 @@ namespace WorkerListProject
                 // Выбран пункт фильтра Даты подписания контракта работника
                 if (numFilter == 3)
                 {
-                    SetDate("Введите верхнюю границу (dd.mm.yyyy): ", ref filter.signingDateUpperBound);
-                    SetDate("Введите нижнюю границу (dd.mm.yyyy): ", ref filter.signingDateLowerBound);
+                    filter.signingDateUpperBound = ReadValue<DateTime?>("Введите верхнюю границу (dd.mm.yyyy): ");
+                    filter.signingDateLowerBound = ReadValue<DateTime?>("Введите нижнюю границу (dd.mm.yyyy): ");
                     Console.WriteLine();
                 }
 
                 // Выбран пункт фильтра Срока действия контракта
                 if (numFilter == 4)
                 {
-                    SetUInt("Введите верхнюю границу: ", ref filter.contractDurationUpperBound);
-                    SetUInt("Введите нижнюю границу: ", ref filter.contractDurationLowerBound);
+                    filter.contractDurationUpperBound = ReadValue<uint?>("Введите верхнюю границу: ");
+                    filter.contractDurationLowerBound = ReadValue<uint?>("Введите нижнюю границу: ");
                     Console.WriteLine();
                 }
 
                 // Выбран пункт фильтра Оклада
                 if (numFilter == 5)
                 {
-                    SetFloat("Введите верхнюю границу: ", ref filter.salaryUpperBound);
-                    SetFloat("Введите нижнюю границу: ", ref filter.salaryLowerBound);
+                    filter.salaryUpperBound = ReadValue<float?>("Введите верхнюю границу: ");
+                    filter.salaryLowerBound = ReadValue<float?>("Введите нижнюю границу: ");
                     Console.WriteLine();
                 }
 
@@ -346,159 +346,42 @@ namespace WorkerListProject
         }
 
         /// <summary>
-        /// Проверка и установка введенной даты
+        /// Считывание значения с проверкой правильности
         /// </summary>
         /// <param name="message">Сообщение-приглашение ввода значения</param>
-        /// <param name="value">Значение, которое необходимо считать</param>
-        public static void SetDate(string message, ref DateTime? value)
+        /// <returns>Введенное пользователем значение или значение по умолчанию для выбранного типа</returns>
+        public static T ReadValue<T>(string message)
         {
-            // Задаем временное значение даты
-            DateTime tmpDate;
+            // Получение настоящего типа обобщенного аргумента, необходимо для правильной работы с Nullable типами
+            Type type = typeof(T);
+            type = Nullable.GetUnderlyingType(type) ?? type;
 
-            // Задаем об успешном сохранении значения фильтра
-            bool done = false;
-
-            while (!done)
+            // Пока не будет введено правильное значение
+            while (true)
             {
-                // Задаем об успешном сохранении значения
-                done = false;
-
                 // Вывод сообщения-приглашения ввода значения
                 PrettyPrinter.PrintFieldName(message);
 
                 // Считываем ввод с консоли
                 string input = Console.ReadLine();
 
-                // Если пустая строка
+                // Если была введена пустая строка
                 if (input == String.Empty)
                 {
-                    // Сохраняем значение
-                    value = null;
-
-                    // Отмечаем, что успешно задали значение
-                    done = true;
+                    // Возвращаем значение по умолчанию для данного типа
+                    return default(T);
                 }
-                // Если что-то введено
-                else
+
+                // Иначе проверяем введенное значение на правильность
+                try
                 {
-                    // Проверяем введенное значение на правильность
-                    done = DateTime.TryParse(input, out tmpDate);
-
-                    // Если неправильное значение - еще раз запускаем проверку
-                    if (!done)
-                    {
-                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
-                        continue;
-                    }
-
-                    // Сохраняем значение
-                    value = tmpDate;
+                    // Если значение введено правильно - возвращаем его
+                    return (T)Convert.ChangeType(input, type);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Проверка и установка введенного целочисленного значения
-        /// </summary>
-        /// <param name="message">Сообщение-приглашение ввода значения</param>
-        /// <param name="value">Значение, в которое необходимо считать</param>
-        public static void SetUInt(string message, ref uint? value)
-        {
-            // Задаем временное значение
-            uint tmpUint;
-
-            // Задаем об успешном сохранении значения
-            bool done = false;
-
-            // Пока не считали правильное значение
-            while (!done)
-            {
-                // Задаем об успешном сохранении значения
-                done = false;
-
-                // Вывод сообщения-приглашения ввода значения
-                PrettyPrinter.PrintFieldName(message);
-
-                // Считываем ввод с консоли
-                string input = Console.ReadLine();
-
-                // Если пустая строка
-                if (input == String.Empty)
+                // Иначе сообщаем об ошибке ввода
+                catch (Exception e)
                 {
-                    // Сохраняем значение
-                    value = null;
-
-                    // Отмечаем, что успешно задали значение
-                    done = true;
-                }
-                // Если что-то введено
-                else
-                {
-                    // Проверяем введенное значение на правильность
-                    done = uint.TryParse(input, out tmpUint);
-
-                    // Если неправильное значение - еще раз запускаем проверку
-                    if (!done)
-                    {
-                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
-                        continue;
-                    }
-
-                    // Сохраняем значение
-                    value = tmpUint;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Проверка и установка введенного дробного числа
-        /// </summary>
-        /// <param name="message">Сообщение-приглашение ввода значения</param>
-        /// <param name="value">Значение, в которое необходимо считать</param>
-        public static void SetFloat(string message, ref float? value)
-        {
-            // Задаем временное значение
-            float tmpFloat;
-
-            // Задаем об успешном сохранении значения
-            bool done = false;
-
-            // Пока не считали правильное значение
-            while (!done)
-            {
-                // Задаем об успешном сохранении значения
-                done = false;
-
-                // Вывод сообщения-приглашения ввода значения
-                PrettyPrinter.PrintFieldName(message);
-
-                // Считываем ввод с консоли
-                string input = Console.ReadLine();
-
-                // Если пустая строка
-                if (input == String.Empty)
-                {
-                    // Сохраняем значение
-                    value = null;
-
-                    // Отмечаем, что успешно задали значение
-                    done = true;
-                }
-                // Если что-то введено
-                else
-                {
-                    // Проверяем введенное значение на правильность
-                    done = float.TryParse(input, out tmpFloat);
-
-                    // Если неправильное значение - еще раз запускаем проверку
-                    if (!done)
-                    {
-                        PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
-                        continue;
-                    }
-
-                    // Сохраняем значение
-                    value = tmpFloat;
+                    PrettyPrinter.PrintError($"Введите еще раз правильное значение{Environment.NewLine}");
                 }
             }
         }
